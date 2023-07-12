@@ -1,10 +1,14 @@
-import { FormControl, MenuItem, Select } from "@mui/material";
-import "./styles/header.scss"; 
+import "./styles/homePage.scss"; 
 import { useEffect, useState } from "react";
+import HomePageLeft from "./components/HomePageLeft";
+import HomePageRight from "./components/HomePageRight";
+import { sortByCases } from "./utils/sortByCases";
 
 function App() {
   const [countries, setCountries] = useState([])
-  const [selectedCountry, setSelectedCountry] = useState('Worldwide')
+  const [selectedCountryName, setSelectedCountryName] = useState('Worldwide')
+  const [selectedCountryData, setSelectedCountryData] = useState({})
+  const [tableData, setTableData] = useState([])
 
   //Fetching list of countries
   useEffect(() => {
@@ -14,41 +18,31 @@ function App() {
         const data = await res.json()
         const countryList = await Promise.all(data.map(country => (
           {
-            name: country.country, //United States
-            value: country.countryInfo.iso2 //USA
+            name: country.country, //United States - for displaying name
+            value: country.countryInfo.iso3 //USA - for fetching data
           }
         )))
+        const sortedData = sortByCases(data)
+        setTableData(sortedData)
         setCountries([...countryList])
       } catch(err) {
         console.log(err)
       }
     })()
   }, [])
-
-  const onCountryChange = async (e) => {
-    const countryCode = e.target.value
-    setSelectedCountry(countryCode)
-  }
   
   return (    
-    <div>
-      <div className="app__header">
-        <h1>COVID-19 TRACKER</h1>
-        <FormControl>
-          <Select 
-            // defaultValue="Worldwide" {/* Without defaultValue you'll get ERR: You have provided an out-of-range value `undefined` for the select component */}
-            value={selectedCountry}
-            onChange={onCountryChange}
-          >
-            <MenuItem value='Worldwide' key={'key'}>Worldwide</MenuItem>
-            {
-              countries.map((country, index) => (
-                <MenuItem value={country.value} key={index}>{country.name}</MenuItem>
-              ))
-            }
-          </Select>
-        </FormControl>
-      </div>
+    <div className="app">
+      <HomePageLeft 
+        countries={countries}
+        setCountries={setCountries}
+        selectedCountryName={selectedCountryName}
+        setSelectedCountryName={setSelectedCountryName}
+        selectedCountryData={selectedCountryData}
+        setSelectedCountryData={setSelectedCountryData}
+      />
+
+      <HomePageRight tableData={tableData}/>
     </div>
   );
 }
