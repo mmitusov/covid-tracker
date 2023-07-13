@@ -1,8 +1,19 @@
-npm install @mui/material @emotion/react @emotion/styled
 npm install sass
+npm install @mui/material @emotion/react @emotion/styled
+npm install chart.js react-chartjs-2
+npm install numeral
+
+    "chart.js": "^4.3.0",
+    "numeral": "^2.0.6",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+tooltips
 
 Для Firebse я буду использовать свою фрилансовскую почту
-Free API for covid-19 cases - https://disease.sh/v3/covid-19/countries
+Free API for covid-19 cases - https://disease.sh/v3/covid-19/all
+https://disease.sh/v3/covid-19/countries
+https://disease.sh/v3/covid-19/countries/${countryCode}
+https://disease.sh/v3/covid-19/historical/all?lastdays=120
 
 Сперва почистим проект. Затем делаем базовый выпадающий список при помощи MaterialUI. Фетчим из covid-19 API перечень стран по которым есть информация и отображаем внутри выпадающего списка. При нажатии на страну в списке, мы сохраняем ее ("countryInfo.iso3") в стейт - onCountryChange(). Делаем это для того, чтобы по названию текущей страны потом подгружать информацию о ней.
 
@@ -30,4 +41,4 @@ Free API for covid-19 cases - https://disease.sh/v3/covid-19/countries
 
 Но мы хотим чтобы наша таблица с колв-ом кейсов отображалась не в алфавитном порядке, а от большего кол-ва кейсов к меньшему. Для этого создадим папку utils и в ней логику по сортировке - sortByCases(data). И будем сортировать список сразу после фетчинга данных в HomePageLeft, и сохранять в стейт уже отсортированный список.
 
-Далее под таблицей создадим график который визуализирует нашу статистику.
+Далее под таблицей создадим график который визуализирует нашу статистику. Компонент отвечающий за отображение графика - LineGraph.jsx. Для работы с графиком мы воспользуемся библиотеками chart.js, react-chartjs-2 и numeral. 

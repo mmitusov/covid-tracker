@@ -13,3 +13,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+@media (max-width: 990px) {
+    .app__left {
+        flex: 1;
+    }
+}
