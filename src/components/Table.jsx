@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/HomePageRight.scss'
+import '../styles/homePageRight.scss'
 
 const Table = ({tableData}) => {
   return (

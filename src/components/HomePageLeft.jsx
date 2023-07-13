@@ -1,4 +1,4 @@
-import "../styles/HomePageLeft.scss"; 
+import "../styles/homePageLeft.scss"; 
 import { useEffect } from "react";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import InfoBox from "./InfoBox";
