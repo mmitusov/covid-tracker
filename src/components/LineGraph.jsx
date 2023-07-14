@@ -1,9 +1,10 @@
+import '../styles/homePageRight.scss'
 import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { Chart, registerables } from 'chart.js'; //Without that <Line /> chart is not gonna work
 import numeral from 'numeral'
 
-const LineGraph = ({caseType = 'cases'}) => {
+const LineGraph = ({casesType}) => {
     Chart.register(...registerables); //Without that <Line /> chart is not gonna work
     const [caseHistory, setCaseHistory] = useState({})
 
@@ -11,24 +12,24 @@ const LineGraph = ({caseType = 'cases'}) => {
         (async() => {
             const res = await fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=120')
             const data = await res.json()
-            const chartData = buildChartData(data, caseType)
+            const chartData = buildChartData(data, casesType)
             setCaseHistory(chartData)
             console.log(data)
         })()
-    }, [])
+    }, [casesType])
 
-    function buildChartData (rawData, caseType) {
-        //Obj 'rawData' holds 3 diff arrays. Name of arr to loop trough we'll pass with 'caseType'
+    function buildChartData (rawData, casesType) {
+        //Obj 'rawData' holds 3 diff arrays. Name of arr to loop trough we'll pass with 'casesType'
         const chartData = [];
         let lastDataPoint;
 
-        Object.keys(rawData[caseType]).forEach((date) => {
+        Object.keys(rawData[casesType]).forEach((date) => {
             const newDataPoint = {
                 x: date, //Date point
-                y: rawData[caseType][date] - lastDataPoint //New daily cases = curr case num - prev case num
+                y: rawData[casesType][date] - lastDataPoint //New daily cases = curr case num - prev case num
             }
             chartData.push(newDataPoint)
-            lastDataPoint = rawData[caseType][date]
+            lastDataPoint = rawData[casesType][date]
         })
         return chartData;
     }
@@ -99,7 +100,7 @@ const LineGraph = ({caseType = 'cases'}) => {
             <Line 
                 data={lineData}
                 options={lineOptions}
-                height={200}
+                height={300}
             />
         </div>
   )

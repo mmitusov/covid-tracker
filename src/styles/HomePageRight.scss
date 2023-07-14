@@ -1,7 +1,30 @@
+.rightSide {
+    height: 100%;
+
+    & * > h3  {
+        margin-top: 20px;
+    }
+}
+
+.rightSide__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: scroll;
+}
+
+.rightSide__table {
+    flex: 1;
+}
+
+.rightSide__lineGraph {
+    flex: 1;
+}
+
 .table {
     display: flex;
     flex-direction: column;
-    height: 300px;
+    height: 400px;
     overflow: scroll;
     margin-top: 10px;
 
@@ -17,4 +40,8 @@
     tr:nth-of-type(odd) {
         background-color: #f5f6fa;
     }
+}
+
+.line__graph {
+    flex-grow: 1;
 }

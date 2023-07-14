@@ -1,10 +1,14 @@
+import "../styles/homePageLeft.scss";
 import { Card, CardContent, Typography } from '@mui/material'
 import React from 'react'
 
-const InfoBox = ({title, cases, total}) => {
+const InfoBox = ({title, cases, total, isRed, active, ...props}) => {
   return (
-    <div>
-        <Card className='infoBox'>
+        <Card 
+            onClick={props.onClick} //Оживляем внешний onClick
+            className={`infoBox ${active && 'infoBox--selected'} ${isRed && 'infoBox--red'}`} //Если карточка активна то отрисовуем доп стиль
+            //Если мы повесили isRed на компонет, то теперь мы можем это проверять и отрисовывать стили
+        >
             <CardContent>
                 <Typography color="textSecondary" className='infoBox__title'>
                     {title}
@@ -17,8 +21,7 @@ const InfoBox = ({title, cases, total}) => {
                 </Typography>
             </CardContent>
         </Card>
-    </div>
-  )
+    )
 }
 
 export default InfoBox

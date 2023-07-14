@@ -1,5 +1,6 @@
-import React from 'react'
 import '../styles/homePageRight.scss'
+import React from 'react'
+import numeral from "numeral";
 
 const Table = ({tableData}) => {
   return (
@@ -10,7 +11,7 @@ const Table = ({tableData}) => {
                     <tr key={country}>
                         <td>{country}</td>
                         <td>
-                            <strong>{cases}</strong>
+                            <strong>{numeral(cases).format("0,0")}</strong>
                         </td>
                     </tr>
                 ))}

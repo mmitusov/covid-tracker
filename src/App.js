@@ -6,9 +6,11 @@ import { sortByCases } from "./utils/sortByCases";
 
 function App() {
   const [countries, setCountries] = useState([])
+  const [mapCountries, setMapCountries] = useState([])
   const [selectedCountryName, setSelectedCountryName] = useState('Worldwide')
   const [selectedCountryData, setSelectedCountryData] = useState({})
   const [tableData, setTableData] = useState([])
+  const [casesType, setCasesType] = useState('cases');
 
   //Fetching list of countries
   useEffect(() => {
@@ -25,6 +27,7 @@ function App() {
         const sortedData = sortByCases(data)
         setTableData(sortedData)
         setCountries([...countryList])
+        setMapCountries(data)
       } catch(err) {
         console.log(err)
       }
@@ -33,16 +36,21 @@ function App() {
   
   return (    
     <div className="app">
-      <HomePageLeft 
+      <HomePageLeft
+        mapCountries={mapCountries}
         countries={countries}
-        setCountries={setCountries}
         selectedCountryName={selectedCountryName}
         setSelectedCountryName={setSelectedCountryName}
         selectedCountryData={selectedCountryData}
         setSelectedCountryData={setSelectedCountryData}
+        casesType={casesType} 
+        setCasesType={setCasesType}
       />
 
-      <HomePageRight tableData={tableData}/>
+      <HomePageRight 
+        tableData={tableData}
+        casesType={casesType}
+      />
     </div>
   );
 }

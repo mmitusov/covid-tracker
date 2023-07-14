@@ -1,17 +1,24 @@
-import "../styles/homePageLeft.scss"; 
-import { useEffect } from "react";
+import "../styles/homePageLeft.scss";
+import "leaflet/dist/leaflet.css"
+import { useEffect, useState } from "react";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import InfoBox from "./InfoBox";
 import Map from "./Map";
+import { prettyPrintStat } from "../utils/prettyPrintStat";
 
 const HomePageLeft = ({
-  countries, 
-  setCountries, 
+  mapCountries,
+  countries,
   selectedCountryName, 
   setSelectedCountryName, 
   selectedCountryData, 
-  setSelectedCountryData
+  setSelectedCountryData,
+  casesType, 
+  setCasesType
 }) => {
+  const [mapCenter, setMapCenter] = useState([44, 10]);
+  const [mapZoom, setMapZoom] = useState(2);
+
   useEffect(() => {
     (async () => {
       const res = await fetch(`https://disease.sh/v3/covid-19/all`)
@@ -30,9 +37,10 @@ const HomePageLeft = ({
     const data = await res.json()
     setSelectedCountryData(data)
     setSelectedCountryName(countryCode)
-    console.log(data)
+    setMapCenter(countryCode === "Worldwide" ? [44, 10] : [data.countryInfo.lat, data.countryInfo.long])
+    setMapZoom(countryCode === "Worldwide" ? 2 : 4)
   }
-   
+
   return (
     <div className="app__left">
       <div className="app__header">
@@ -42,6 +50,7 @@ const HomePageLeft = ({
             // defaultValue="Worldwide" {/* Without defaultValue you'll get ERR: You have provided an out-of-range value `undefined` for the select component */}
             value={selectedCountryName}
             onChange={onCountryChange}
+            className="app__dropdown"
           >
             <MenuItem value='Worldwide' key={'key'}>Worldwide</MenuItem>
             {
@@ -54,12 +63,32 @@ const HomePageLeft = ({
       </div>
 
       <div className="app__stats">
-        <InfoBox title="Daily new cases" cases={selectedCountryData.todayCases} total={selectedCountryData.cases}/>
-        <InfoBox title="Daily recovered" cases={selectedCountryData.todayRecovered} total={selectedCountryData.recovered}/>
-        <InfoBox title="Daily deaths" cases={selectedCountryData.todayDeaths} total={selectedCountryData.deaths}/>
+        <InfoBox 
+          isRed
+          active={casesType === 'cases'}
+          onClick={(e) => setCasesType('cases')}
+          title="Daily new cases" 
+          cases={prettyPrintStat(selectedCountryData.todayCases)} 
+          total={prettyPrintStat(selectedCountryData.cases)}
+        />
+        <InfoBox 
+          active={casesType === 'recovered'}
+          onClick={(e) => setCasesType('recovered')}
+          title="Daily recovered" 
+          cases={prettyPrintStat(selectedCountryData.todayRecovered)}
+          total={prettyPrintStat(selectedCountryData.recovered)}
+        />
+        <InfoBox
+          isRed
+          active={casesType === 'deaths'}
+          onClick={(e) => setCasesType('deaths')}
+          title="Daily deaths" 
+          cases={prettyPrintStat(selectedCountryData.todayDeaths)} 
+          total={prettyPrintStat(selectedCountryData.deaths)}
+        />
       </div>
 
-      <Map />
+      <Map casesType={casesType} mapCountries={mapCountries} mapCenter={mapCenter} mapZoom={mapZoom}/>
     </div>
   )
 }
